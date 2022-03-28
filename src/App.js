@@ -1,12 +1,14 @@
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
+import { useState } from "react";
 
 // pages
-import Home from './pages/Home'
-import About from './pages/About'
-import Products from './pages/Products'
-import ProductDetails from './pages/ProductDetails'
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
+  const [isCartEmpty] = useState(false);
   return (
     <div className="App">
       <BrowserRouter>
@@ -16,21 +18,36 @@ function App() {
           <Link to="/about">About</Link>
           <Link to="/products">Products</Link>
         </nav>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/products/:id">
-            <ProductDetails />
-          </Route>
-          <Route path="/products">
-            <Products />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about/*" element={<About />} />
+
+          <Route path="/products/:id/*" element={<ProductDetails />} />
+
+          <Route path="/products" element={<Products />} />
+
+          <Route
+            path="/test"
+            element={
+              <div>
+                <h1>Test</h1>
+                <p>This is test</p>
+              </div>
+            }
+          />
+
+          <Route path="/reload" element={<Navigate to="/about" />} />
+
+          <Route
+            path="/checkout"
+            element={
+              isCartEmpty ? <Navigate to="/products" /> : <p>Checkout Page</p>
+            }
+          />
+        </Routes>
       </BrowserRouter>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
